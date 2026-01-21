@@ -1,1 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Banking App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+<div class="bank-box">
+    <h2>My Bank</h2>
+
+    <div class="balance">
+        Balance: ₹<span id="balance">0</span>
+    </div>
+
+    <input type="number" id="amount" placeholder="Enter amount">
+
+    <button class="deposit" onclick="deposit()">Deposit</button>
+    <button class="withdraw" onclick="withdraw()">Withdraw</button>
+
+    <div class="msg" id="message"></div>
+</div>
+
+<script>
+    let balance = 0;
+
+    function deposit() {
+        let amount = Number(document.getElementById("amount").value);
+
+        if (amount <= 0) {
+            showMessage("Enter valid amount");
+            return;
+        }
+
+        balance = balance + amount;
+        updateBalance();
+        showMessage("Deposit successful", "green");
+    }
+
+    function withdraw() {
+        let amount = Number(document.getElementById("amount").value);
+
+        if (amount <= 0) {
+            showMessage("Enter valid amount");
+            return;
+        }
+
+        if (amount > balance) {
+            showMessage("Insufficient balance");
+            return;
+        }
+
+        balance = balance - amount;
+        updateBalance();
+        showMessage("Withdrawal successful", "green");
+    }
+
+    function updateBalance() {
+        document.getElementById("balance").innerText = balance;
+        document.getElementById("amount").value = "";
+    }
+
+    function showMessage(text, color = "red") {
+        let msg = document.getElementById("message");
+        msg.innerText = text;
+        msg.style.color = color;
+    }
+</script>
+
+</body>
+</html>
