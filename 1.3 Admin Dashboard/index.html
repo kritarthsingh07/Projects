@@ -1,1 +1,27 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+<h1>Admin Dashboard</h1>
+<button onclick="toggleTheme()">🌙 Light Mode</button>
+</header>
+<div class="dashboard">
+<div class="sidebar">Navigation</div>
+<div class="cards">
+<div class="card">Analytics</div>
+<div class="card">Users</div>
+<div class="card">Settings</div>
+</div>
+</div>
+<script>
+const b=document.body,btn=document.querySelector("button");
+if(localStorage.getItem("theme")==="light"){b.classList.add("light");btn.textContent="🌙 Dark Mode"}
+function toggleTheme(){b.classList.toggle("light");localStorage.setItem("theme",b.classList.contains("light")?"light":"dark");btn.textContent=b.classList.contains("light")?"🌙 Dark Mode":"☀️ Light Mode"}
+</script>
+</body>
+</html>
