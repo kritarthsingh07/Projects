@@ -5,7 +5,6 @@
     font-family: "Segoe UI", Tahoma, sans-serif;
 }
 
-/* Center layout */
 body {
     min-height: 100vh;
     display: flex;
@@ -15,7 +14,6 @@ body {
     overflow: hidden;
 }
 
-/* Background blur */
 body::before {
     content: "";
     position: absolute;
@@ -28,7 +26,6 @@ body::before {
     z-index: -2;
 }
 
-/* Dark overlay */
 body::after {
     content: "";
     position: absolute;
@@ -37,7 +34,6 @@ body::after {
     z-index: -1;
 }
 
-/* Glass card */
 .glass-card {
     width: 92%;
     max-width: 750px;
@@ -57,7 +53,6 @@ body::after {
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.45);
 }
 
-/* Title */
 h1 {
     font-size: 30px;
     color: #ffffff;
@@ -71,7 +66,6 @@ h1 span {
     margin-top: 6px;
 }
 
-/* Project grid */
 .projects {
     margin-top: 30px;
     display: grid;
@@ -79,9 +73,8 @@ h1 span {
     gap: 14px;
 }
 
-/* Project cards */
 .project-card {
-    text-decoration: none;   /* removes underline */
+    text-decoration: none;   
     padding: 16px;
     border-radius: 12px;
     font-size: 17px;
@@ -99,7 +92,7 @@ h1 span {
     box-shadow: 0 18px 35px rgba(0, 0, 0, 0.45);
 }
 
-/* Mobile */
+
 @media (max-width: 480px) {
     h1 {
         font-size: 24px;
