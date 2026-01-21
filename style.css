@@ -2,10 +2,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: "Segoe UI", Tahoma, sans-serif;
 }
 
-/* Page layout */
+/* Center layout */
 body {
     min-height: 100vh;
     display: flex;
@@ -15,7 +15,7 @@ body {
     overflow: hidden;
 }
 
-/* Blurred background image */
+/* Background blur */
 body::before {
     content: "";
     position: absolute;
@@ -23,42 +23,90 @@ body::before {
     background-image: url("bg.jpg");
     background-size: cover;
     background-position: center;
-    filter: blur(8px);
-    transform: scale(1.1);
+    filter: blur(10px);
+    transform: scale(1.15);
+    z-index: -2;
+}
+
+/* Dark overlay */
+body::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
     z-index: -1;
 }
 
-/* Main content box */
-.container {
-    background: rgba(255, 255, 255, 0.88);
-    padding: 30px 25px;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 1000px;
+/* Glass card */
+.glass-card {
+    width: 92%;
+    max-width: 750px;
+    padding: 40px 35px;
+    border-radius: 18px;
     text-align: center;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.35);
+
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.25),
+        rgba(255, 255, 255, 0.1)
+    );
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.45);
 }
 
-/* Heading */
+/* Title */
 h1 {
-    margin-bottom: 20px;
-    color: #222;
+    font-size: 30px;
+    color: #ffffff;
 }
 
-/* Buttons */
-.btn {
+h1 span {
     display: block;
-    text-decoration: none;
-    background-color: #0d6efd;
-    color: white;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 6px;
     font-size: 16px;
-    transition: background-color 0.3s, transform 0.2s;
+    font-weight: 400;
+    color: #d1d5db;
+    margin-top: 6px;
 }
 
-.btn:hover {
-    background-color: #084298;
-    transform: translateY(-2px);
+/* Project grid */
+.projects {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+}
+
+/* Project cards */
+.project-card {
+    text-decoration: none;   /* removes underline */
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 500;
+    color: #ffffff;
+
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.45);
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 24px;
+    }
+
+    .project-card {
+        font-size: 15px;
+        padding: 14px;
+    }
 }
