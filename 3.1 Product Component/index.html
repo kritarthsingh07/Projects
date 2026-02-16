@@ -1,1 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProductCard Experiment</title>
 
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial;
+      background: #f5f7fb;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 50px;
+    }
+
+    .card {
+      width: 280px;
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.12);
+    }
+
+    .image-box {
+      width: 100%;
+      height: 200px;
+      background: #f1f5f9;
+      border-radius: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .dummy-img {
+      width: 110px;
+      height: 110px;
+      border-radius: 20px;
+      background: #dbe3ea;
+    }
+
+    .title {
+      font-size: 26px;
+      margin: 20px 0 10px;
+      font-weight: bold;
+    }
+
+    .price {
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 18px;
+    }
+
+    .in {
+      background: #dff7e6;
+      color: green;
+    }
+
+    .out {
+      background: #fde2e2;
+      color: darkred;
+    }
+  </style>
+
+  <!-- React CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+</head>
+
+<body>
+
+  <div id="root"></div>
+
+  <!-- React Code -->
+  <script type="text/babel">
+
+    function ProductCard(props) {
+      return (
+        <div className="card">
+          <div className="image-box">
+            <div className="dummy-img"></div>
+          </div>
+
+          <h2 className="title">{props.name}</h2>
+          <p className="price">${props.price.toFixed(2)}</p>
+
+          <span className={props.inStock ? "badge in" : "badge out"}>
+            {props.inStock ? "In Stock" : "Out of Stock"}
+          </span>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <div className="container">
+          <ProductCard name="Wireless Headphones" price={129.99} inStock={true} />
+          <ProductCard name="Mechanical Keyboard" price={89.99} inStock={true} />
+          <ProductCard name="Smart Watch" price={199.99} inStock={true} />
+          <ProductCard name="Monitor" price={299.99} inStock={true} />
+          <ProductCard name="Wall Clock" price={79.99} inStock={true} />
+          <ProductCard name="Speaker" price={87.99} inStock={false} />
+          <ProductCard name="ALEXA" price={49.99} inStock={true} />
+          <ProductCard name="Analog Watch" price={29.99} inStock={true} />
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+
+  </script>
+
+</body>
+</html>
