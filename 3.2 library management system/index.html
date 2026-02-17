@@ -1,1 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Library Management System</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f6ff;
+    }
+
+    .container {
+      width: 60%;
+      margin: auto;
+      padding: 40px 0;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 45px;
+      margin-bottom: 30px;
+    }
+
+    .search {
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+
+    .form {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .form input {
+      flex: 1;
+      padding: 15px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    .form button {
+      padding: 15px 25px;
+      font-size: 16px;
+      background: #0057ff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .form button:hover {
+      background: #003ecb;
+    }
+
+    .book-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .book-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px;
+      border-radius: 15px;
+      border: 1px solid #ddd;
+      background: white;
+    }
+
+    .book-card h2 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .book-card p {
+      margin: 5px 0 0;
+      font-size: 18px;
+      color: gray;
+    }
+
+    .remove-btn {
+      padding: 12px 25px;
+      background: #e53935;
+      color: white;
+      border: none;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .remove-btn:hover {
+      background: darkred;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>Library Management System</h1>
+
+    <!-- Search Box -->
+    <input
+      type="text"
+      id="searchBox"
+      class="search"
+      placeholder="Search books..."
+      onkeyup="searchBooks()"
+    />
+
+    <!-- Add Book Form -->
+    <div class="form">
+      <input type="text" id="titleInput" placeholder="Book Title" />
+      <input type="text" id="authorInput" placeholder="Author" />
+      <button onclick="addBook()">Add Book</button>
+    </div>
+
+    <!-- Book List -->
+    <div class="book-list" id="bookList"></div>
+  </div>
+
+  <script>
+    // Default Books
+    let books = [
+      { id: 1, title: "The Great Gatsby", author: "S. Scott Fitzgerald" },
+      { id: 2, title: "To Kill a Mockingbird", author: "Harper Lee" }
+    ];
+
+    // Display Books
+    function displayBooks(bookArray) {
+      const bookList = document.getElementById("bookList");
+      bookList.innerHTML = "";
+
+      bookArray.forEach((book) => {
+        const card = document.createElement("div");
+        card.className = "book-card";
+
+        card.innerHTML = `
+          <div>
+            <h2>${book.title}</h2>
+            <p>by ${book.author}</p>
+          </div>
+          <button class="remove-btn" onclick="removeBook(${book.id})">
+            Remove
+          </button>
+        `;
+
+        bookList.appendChild(card);
+      });
+    }
+
+    // Add Book
+    function addBook() {
+      const title = document.getElementById("titleInput").value.trim();
+      const author = document.getElementById("authorInput").value.trim();
+
+      if (title === "" || author === "") {
+        alert("Please enter both Title and Author!");
+        return;
+      }
+
+      const newBook = {
+        id: Date.now(),
+        title: title,
+        author: author
+      };
+
+      books.push(newBook);
+
+      document.getElementById("titleInput").value = "";
+      document.getElementById("authorInput").value = "";
+
+      displayBooks(books);
+    }
+
+    // Remove Book
+    function removeBook(id) {
+      books = books.filter((book) => book.id !== id);
+      displayBooks(books);
+    }
+
+    // Search Books
+    function searchBooks() {
+      const searchText = document.getElementById("searchBox").value.toLowerCase();
+
+      const filtered = books.filter((book) =>
+        book.title.toLowerCase().includes(searchText)
+      );
+
+      displayBooks(filtered);
+    }
+
+    // Load Books Initially
+    displayBooks(books);
+  </script>
+
+</body>
+</html>
 
