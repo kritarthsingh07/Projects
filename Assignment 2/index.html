@@ -3,25 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task 1 - Image Gallery</title>
+  <title>Assignment 2</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+  <h1>Assignment 2</h1>
+
+  <!-- ======================= -->
+  <!-- TASK 1: IMAGE GALLERY -->
+  <!-- ======================= -->
   <h2>Task 1: Image Gallery with Click Preview</h2>
 
-  <!-- Preview Image -->
-  <div class="preview">
-    <img id="mainImage" src="https://picsum.photos/id/101/400/250">
+  <div class="gallery-container">
+
+    <!-- Preview Area -->
+    <div class="preview">
+      <img id="previewImage" src="https://via.placeholder.com/400" alt="Preview">
+    </div>
+
+    <!-- Thumbnails -->
+    <div class="thumbnails">
+      <img src="https://picsum.photos/id/101/100" class="thumb active">
+      <img src="https://picsum.photos/id/102/100" class="thumb">
+      <img src="https://picsum.photos/id/103/100" class="thumb">
+      <img src="https://picsum.photos/id/104/100" class="thumb">
+    </div>
+
   </div>
 
-  <!-- Thumbnails -->
-  <div class="thumbnails">
-    <img src="https://picsum.photos/id/101/100/70" class="thumb active">
-    <img src="https://picsum.photos/id/102/100/70" class="thumb">
-    <img src="https://picsum.photos/id/103/100/70" class="thumb">
-    <img src="https://picsum.photos/id/104/100/70" class="thumb">
+  <hr>
+
+  <!-- ======================= -->
+  <!-- TASK 2: TABLE GENERATOR -->
+  <!-- ======================= -->
+  <h2>Task 2: Dynamic Table Generator</h2>
+
+  <div class="form-container">
+    <input type="text" id="name" placeholder="Enter Name">
+    <input type="number" id="age" placeholder="Enter Age">
+    <input type="text" id="course" placeholder="Enter Course">
+    <button onclick="addRow()">Add Row</button>
   </div>
+
+  <table id="studentTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Course</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <!-- Dynamic Rows Will Appear Here -->
+    </tbody>
+  </table>
 
   <script src="script.js"></script>
 
