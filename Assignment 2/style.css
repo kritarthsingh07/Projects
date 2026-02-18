@@ -1,0 +1,25 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.preview img {
+  width: 400px;
+  height: 250px;
+  border: 3px solid black;
+  margin-bottom: 20px;
+}
+
+.thumbnails img {
+  width: 100px;
+  height: 70px;
+  margin: 10px;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: 0.3s;
+}
+
+/* Highlight Selected Thumbnail */
+.thumbnails img.active {
+  border: 3px solid red;
+}
