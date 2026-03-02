@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>E-commerce Catalog</title>
+
+<style>
+    body {
+        font-family: Arial;
+        background: #f5f5f5;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: auto;
+    }
+
+    .card {
+        background: white;
+        padding: 15px;
+        margin-top: 15px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 5px #ccc;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 8px;
+        margin: 5px 0;
+    }
+
+    button {
+        padding: 8px 12px;
+        margin: 5px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .btn-add { background: green; color: white; }
+    .btn-delete { background: red; color: white; }
+    .btn-update { background: blue; color: white; }
+
+    .variant, .review {
+        background: #eee;
+        padding: 8px;
+        margin: 5px 0;
+        border-radius: 5px;
+    }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+    <h1>E-commerce Catalog</h1>
+
+    
+    <div class="card">
+        <h3>Add Product</h3>
+        <input id="name" placeholder="Product Name">
+        <input id="category" placeholder="Category">
+
+        <button class="btn-add" onclick="addProduct()">Add Product</button>
+    </div>
+
+    <div id="productList"></div>
+    <div class="card">
+        <h3>Aggregation Result</h3>
+        <button onclick="showLowStock()">Low Stock Products</button>
+        <button onclick="showCategoryRatings()">Category Ratings</button>
+        <pre id="result"></pre>
+    </div>
+</div>
+
+<script>
+let products = JSON.parse(localStorage.getItem("products")) || [];
+  
+function addProduct() {
+    let name = document.getElementById("name").value;
+    let category = document.getElementById("category").value;
+
+    if (!name || !category) return alert("Fill all fields");
+
+    let product = {
+        name,
+        category,
+        variants: [],
+        reviews: [],
+        avgRating: 0
+    };
+
+    products.push(product);
+    save();
+}
+
+function addVariant(i) {
+    let sku = prompt("Enter SKU");
+    let color = prompt("Enter Color");
+    let price = parseFloat(prompt("Enter Price"));
+    let stock = parseInt(prompt("Enter Stock"));
+
+    products[i].variants.push({ sku, color, price, stock });
+    save();
+}
+
+
+function addReview(i) {
+    let rating = parseInt(prompt("Rating (1-5)"));
+    let comment = prompt("Comment");
+
+    let review = {
+        userId: Date.now().toString(),
+        rating,
+        comment
+    };
+
+    products[i].reviews.push(review);
+    calculateAvg(i);
+    save();
+}
+
+
+function calculateAvg(i) {
+    let reviews = products[i].reviews;
+    if (reviews.length === 0) return;
+
+    let sum = reviews.reduce((a, b) => a + b.rating, 0);
+    products[i].avgRating = (sum / reviews.length).toFixed(2);
+}
+
+// Update Stock
+function updateStock(i, v) {
+    let newStock = parseInt(prompt("New Stock"));
+    products[i].variants[v].stock = newStock;
+    save();
+}
+
+function deleteProduct(i) {
+    products.splice(i, 1);
+    save();
+}
+
+function save() {
+    localStorage.setItem("products", JSON.stringify(products));
+    display();
+}
+
+function display() {
+    let html = "";
+
+    products.forEach((p, i) => {
+        html += `
+        <div class="card">
+            <h2>${p.name}</h2>
+            <p>Category: ${p.category}</p>
+            <p>Avg Rating: ${p.avgRating}</p>
+
+            <h4>Variants</h4>
+            ${p.variants.map((v, vi) => `
+                <div class="variant">
+                    SKU: ${v.sku}, Color: ${v.color}, Price: ${v.price}, Stock: ${v.stock}
+                    <button class="btn-update" onclick="updateStock(${i}, ${vi})">Update Stock</button>
+                </div>
+            `).join("")}
+
+            <button class="btn-add" onclick="addVariant(${i})">+ Variant</button>
+
+            <h4>Reviews</h4>
+            ${p.reviews.map(r => `
+                <div class="review">
+                    Rating: ${r.rating} ⭐ <br>
+                    ${r.comment}
+                </div>
+            `).join("")}
+
+            <button class="btn-add" onclick="addReview(${i})">+ Review</button>
+            <button class="btn-delete" onclick="deleteProduct(${i})">Delete</button>
+        </div>
+        `;
+    });
+
+    document.getElementById("productList").innerHTML = html;
+}
+
+function showLowStock() {
+    let result = products.map(p => {
+        return {
+            name: p.name,
+            lowStockVariants: p.variants.filter(v => v.stock < 10)
+        };
+    });
+
+    document.getElementById("result").innerText = JSON.stringify(result, null, 2);
+}
+
+function showCategoryRatings() {
+    let map = {};
+
+    products.forEach(p => {
+        if (!map[p.category]) {
+            map[p.category] = { total: 0, count: 0 };
+        }
+
+        if (p.avgRating > 0) {
+            map[p.category].total += parseFloat(p.avgRating);
+            map[p.category].count++;
+        }
+    });
+
+    let result = Object.keys(map).map(cat => ({
+        category: cat,
+        avgCategoryRating: map[cat].count === 0 ? null :
+            (map[cat].total / map[cat].count).toFixed(2)
+    }));
+
+    document.getElementById("result").innerText = JSON.stringify(result, null, 2);
+}
+
+display();
+</script>
+
+</body>
+</html>
