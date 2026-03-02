@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>🎟️ Ticket Booking with Seat Lock</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+}
+
+h1 { color: #38bdf8; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(10, 40px);
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.seat {
+  width: 40px;
+  height: 40px;
+  background: #1e293b;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.booked { background: #ef4444; cursor: not-allowed; }
+.locked { background: #facc15; }
+.selected { background: #22c55e; }
+
+button {
+  margin: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.lockBtn { background: #facc15; }
+.bookBtn { background: #22c55e; }
+
+.log {
+  margin-top: 20px;
+  background: black;
+  padding: 10px;
+  height: 150px;
+  overflow-y: auto;
+  font-size: 12px;
+  text-align: left;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎟️ Ticket Booking System</h1>
+
+<div id="seats" class="grid"></div>
+
+<br>
+
+<button class="lockBtn" onclick="lockSeat()">🔒 Lock Seat</button>
+<button class="bookBtn" onclick="confirmBooking()">✅ Confirm Booking</button>
+
+<h3>Remaining Seats: <span id="remaining"></span></h3>
+<h3>Lock Timer: <span id="timer">--</span></h3>
+
+<div class="log" id="log"></div>
+
+<script>
+const totalSeats = 100;
+let seats = Array(totalSeats).fill("available");
+let selectedSeat = null;
+let lockTimer = null;
+let countdown = 0;
+
+const seatContainer = document.getElementById("seats");
+const logDiv = document.getElementById("log");
+
+// Render seats
+function renderSeats() {
+  seatContainer.innerHTML = "";
+
+  seats.forEach((status, index) => {
+    const seat = document.createElement("div");
+    seat.classList.add("seat");
+
+    if (status === "booked") seat.classList.add("booked");
+    if (status === "locked") seat.classList.add("locked");
+    if (index === selectedSeat) seat.classList.add("selected");
+
+    seat.onclick = () => selectSeat(index);
+
+    seatContainer.appendChild(seat);
+  });
+
+  document.getElementById("remaining").innerText =
+    seats.filter(s => s === "available").length;
+}
+
+// Select seat
+function selectSeat(index) {
+  if (seats[index] !== "available") return;
+
+  selectedSeat = index;
+  renderSeats();
+}
+
+// Lock seat
+function lockSeat() {
+  if (selectedSeat === null) {
+    alert("Select a seat first!");
+    return;
+  }
+
+  if (seats[selectedSeat] !== "available") {
+    alert("Seat not available!");
+    return;
+  }
+
+  seats[selectedSeat] = "locked";
+  log(`🔒 Seat ${selectedSeat} locked`);
+
+  startTimer();
+  renderSeats();
+}
+
+// Timer (10 sec lock)
+function startTimer() {
+  clearInterval(lockTimer);
+  countdown = 10;
+
+  document.getElementById("timer").innerText = countdown + " sec";
+
+  lockTimer = setInterval(() => {
+    countdown--;
+    document.getElementById("timer").innerText = countdown + " sec";
+
+    if (countdown <= 0) {
+      releaseSeat();
+    }
+  }, 1000);
+}
+
+// Release lock
+function releaseSeat() {
+  if (selectedSeat !== null && seats[selectedSeat] === "locked") {
+    seats[selectedSeat] = "available";
+    log(`⏳ Lock expired for seat ${selectedSeat}`);
+  }
+
+  selectedSeat = null;
+  document.getElementById("timer").innerText = "--";
+  clearInterval(lockTimer);
+  renderSeats();
+}
+
+// Confirm booking
+function confirmBooking() {
+  if (selectedSeat === null) {
+    alert("No seat selected!");
+    return;
+  }
+
+  if (seats[selectedSeat] !== "locked") {
+    alert("Lock the seat first!");
+    return;
+  }
+
+  seats[selectedSeat] = "booked";
+  log(`✅ Seat ${selectedSeat} booked successfully`);
+
+  clearInterval(lockTimer);
+  document.getElementById("timer").innerText = "--";
+
+  selectedSeat = null;
+  renderSeats();
+}
+
+// Log function
+function log(message) {
+  logDiv.innerHTML += `${new Date().toLocaleTimeString()} - ${message}<br>`;
+  logDiv.scrollTop = logDiv.scrollHeight;
+}
+
+renderSeats();
+</script>
+
+</body>
+</html>
