@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Management System</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        .btn-add {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-edit {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-delete {
+            background: red;
+            color: white;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 5px #ccc;
+        }
+
+        .form-box {
+            display: none;
+            background: white;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Student Management System</h1>
+
+    <button class="btn btn-add" onclick="showForm()">+ New Student</button>
+
+    <div class="form-box" id="formBox">
+        <input type="text" id="name" placeholder="Enter Name">
+        <input type="number" id="roll" placeholder="Enter Roll Number">
+        <button class="btn btn-add" onclick="saveStudent()">Save</button>
+    </div>
+
+    <div id="studentList"></div>
+</div>
+
+<script>
+    let students = JSON.parse(localStorage.getItem("students")) || [];
+    let editIndex = -1;
+
+    function showForm() {
+        document.getElementById("formBox").style.display = "block";
+        document.getElementById("name").value = "";
+        document.getElementById("roll").value = "";
+        editIndex = -1;
+    }
+
+    function saveStudent() {
+        let name = document.getElementById("name").value;
+        let roll = document.getElementById("roll").value;
+
+        if (name === "" || roll === "") {
+            alert("All fields required!");
+            return;
+        }
+
+        let student = { name, roll };
+
+        if (editIndex === -1) {
+            students.push(student);
+        } else {
+            students[editIndex] = student;
+        }
+
+        localStorage.setItem("students", JSON.stringify(students));
+        document.getElementById("formBox").style.display = "none";
+        displayStudents();
+    }
+
+    function displayStudents() {
+        let list = document.getElementById("studentList");
+        list.innerHTML = "";
+
+        students.forEach((s, index) => {
+            list.innerHTML += `
+                <div class="card">
+                    <h2>${s.name}</h2>
+                    <p>Roll: ${s.roll}</p>
+                    <button class="btn btn-edit" onclick="editStudent(${index})">Edit</button>
+                    <button class="btn btn-delete" onclick="deleteStudent(${index})">Delete</button>
+                </div>
+            `;
+        });
+    }
+
+    function editStudent(index) {
+        let s = students[index];
+        document.getElementById("formBox").style.display = "block";
+        document.getElementById("name").value = s.name;
+        document.getElementById("roll").value = s.roll;
+        editIndex = index;
+    }
+
+    function deleteStudent(index) {
+        if (confirm("Are you sure?")) {
+            students.splice(index, 1);
+            localStorage.setItem("students", JSON.stringify(students));
+            displayStudents();
+        }
+    }
+
+    displayStudents();
+</script>
+
+</body>
+</html>
